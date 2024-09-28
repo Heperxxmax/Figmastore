@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогноз Погоды</title>
+    <script src="/eel.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0e0e0e;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            color: #1db954;
+            margin-bottom: 1rem;
+        }
+        
+        input, button {
+            padding: 10px;
+            font-size: 1.2rem;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+        input {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        button {
+            background-color: #1db954;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1ed760;
+        }
+
+        .weather {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .weather img {
+            width: 100px;
+        }
+
+        .weather-info {
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Прогноз погоды</h1>
+
+    <input type="text" id="city" placeholder="Введите город">
+    <button onclick="getWeather()">Получить погоду</button>
+
+    <div class="weather" id="weather">
+        <!-- Погода будет отображаться здесь -->
+    </div>
+
+    <script>
+        async function getWeather() {
+            const city = document.getElementById("city").value;
+            if (city) {
+                const weather = await eel.get_weather(city)();
+                
+                const weatherDiv = document.getElementById("weather");
+                
+                if (weather.error) {
+                    weatherDiv.innerHTML = `<p>${weather.error}</p>`;
+                } else {
+                    weatherDiv.innerHTML = `
+                        <img src="http://openweathermap.org/img/wn/${weather.icon}@2x.png" alt="Icon">
+                        <div class="weather-info">
+                            <p><strong>${weather.city}</strong></p>
+                            <p>Температура: ${weather.temperature} °C</p>
+                            <p>Описание: ${weather.description}</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
